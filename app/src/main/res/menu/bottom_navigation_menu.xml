@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/ordersTab"
+        android:title="Orders"
+        android:icon="@drawable/ic_local_offer_black_24dp"/>
+
+    <item android:id="@+id/addProductTab"
+        android:title="Add Product"
+        android:icon="@drawable/ic_add_circle_black_24dp"/>
+
+    <item android:id="@+id/dashboardTab"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp"/>
+</menu>
