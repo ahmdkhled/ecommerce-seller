@@ -27,8 +27,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Log.d("BOTTOMVIEWW",""+item.getTitle());
-                return false;
+                return true;
             }
         });
+
     }
 }
