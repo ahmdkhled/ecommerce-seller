@@ -16,6 +16,7 @@ public class OrdersRepository {
 
     private static OrdersRepository ordersRepository;
     private MutableLiveData<ArrayList<Order>> orders=new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLoading=new MutableLiveData<>();
 
     public static OrdersRepository getInstance(){
         if (ordersRepository==null)
@@ -24,6 +25,7 @@ public class OrdersRepository {
     }
 
     public MutableLiveData<ArrayList<Order>> getOrders(String marketId){
+        isLoading.setValue(true);
         RetrofitClient.getApiService()
                 .getOrders(marketId)
                 .enqueue(new Callback<ArrayList<Order>>() {
@@ -32,14 +34,21 @@ public class OrdersRepository {
                         if (response.isSuccessful()){
                             ArrayList<Order> ordersList=response.body();
                             orders.setValue(ordersList);
+                            isLoading.setValue(false);
+
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ArrayList<Order>> call, Throwable t) {
+                        isLoading.setValue(false);
                         Log.d("BOTTOMVIEWW",t.getMessage());
                     }
                 });
         return orders;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 }
