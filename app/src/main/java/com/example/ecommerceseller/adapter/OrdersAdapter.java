@@ -2,6 +2,8 @@ package com.example.ecommerceseller.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +14,6 @@ import android.widget.TextView;
 
 import com.example.ecommerceseller.R;
 import com.example.ecommerceseller.model.Order;
-import com.example.ecommerceseller.model.OrderItem;
-
 import java.util.ArrayList;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersHolder> {
@@ -40,6 +40,12 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersHold
         holder.orderDate.setText(order.getOrder_date());
         holder.totalPrice.setText(String.valueOf(order.getTotalPrice()));
         holder.totalItems.setText(String.valueOf(order.getOrderItems().size()));
+
+        OrderItemsAdapter orderItemsAdapter=new OrderItemsAdapter(context,order.getOrderItems());
+        holder.orderItemsRecycler.setAdapter(orderItemsAdapter);
+        holder.orderItemsRecycler.setLayoutManager(new LinearLayoutManager(context));
+        holder.orderItemsRecycler.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
+
     }
 
     @Override
@@ -66,7 +72,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersHold
             expand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    orderItemsRecycler.setVisibility(View.VISIBLE);
+                    if (orderItemsRecycler.getVisibility()==View.GONE)
+                        orderItemsRecycler.setVisibility(View.VISIBLE);
+                    else
+                        orderItemsRecycler.setVisibility(View.GONE);
                 }
             });
         }
