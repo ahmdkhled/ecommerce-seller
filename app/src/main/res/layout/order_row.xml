@@ -121,7 +121,7 @@
         app:layout_constraintTop_toBottomOf="@+id/order_date"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="5dp"
-        android:background="#760802"
+        android:background="#CC1717"
         />
 
     <ImageView
