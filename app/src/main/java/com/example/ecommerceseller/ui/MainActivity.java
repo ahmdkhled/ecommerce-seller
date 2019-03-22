@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (fragment==current){
             Log.d("BOTTOMVIEWW","null");
-            //return;
+            return;
         }
 
         getSupportFragmentManager()
