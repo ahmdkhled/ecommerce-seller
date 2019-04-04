@@ -58,6 +58,7 @@ public class AddProductFrag extends Fragment {
                                 }
                             });
                     observeLoading();
+                    observeError();
                     clearFields();
                 }
 
@@ -126,5 +127,15 @@ public class AddProductFrag extends Fragment {
                             uploadPB.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    private void observeError(){
+        addProductViewModel.getError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                if (s!=null)
+                    Toast.makeText(getContext(), "error : "+s, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
