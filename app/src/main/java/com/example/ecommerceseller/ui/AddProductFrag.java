@@ -42,6 +42,7 @@ public class AddProductFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 if (validateInput()){
+                    uploadProduct.setEnabled(false);
                     String name=nameIL.getEditText().getText().toString();
                     String price=priceIL.getEditText().getText().toString();
                     String stock=stockIL.getEditText().getText().toString();
@@ -52,6 +53,7 @@ public class AddProductFrag extends Fragment {
                             .observe(getActivity(), new Observer<ProductResponse>() {
                                 @Override
                                 public void onChanged(@Nullable ProductResponse productResponse) {
+                                    uploadProduct.setEnabled(true);
                                     if (productResponse != null) {
                                         Toast.makeText(getContext(), productResponse.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
@@ -133,6 +135,7 @@ public class AddProductFrag extends Fragment {
         addProductViewModel.getError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
+                uploadProduct.setEnabled(true);
                 if (s!=null)
                     Toast.makeText(getContext(), "error : "+s, Toast.LENGTH_SHORT).show();
             }

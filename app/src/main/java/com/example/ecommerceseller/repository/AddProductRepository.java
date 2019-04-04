@@ -26,6 +26,7 @@ public class AddProductRepository {
 
     public MutableLiveData<ProductResponse> uploadProduct(String name, float price, int quantity
                                         , String desc, int categoryId, int marketId ){
+        Log.d("ADDDDPRODUCTT","request");
 
         isLoading.setValue(true);
         RetrofitClient.getApiService().

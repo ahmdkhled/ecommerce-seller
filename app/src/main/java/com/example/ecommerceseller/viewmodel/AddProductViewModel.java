@@ -21,6 +21,6 @@ public class AddProductViewModel extends ViewModel {
     }
 
     public MutableLiveData<String> getError() {
-        return error;
+        return AddProductRepository.getInstance().getError();
     }
 }
