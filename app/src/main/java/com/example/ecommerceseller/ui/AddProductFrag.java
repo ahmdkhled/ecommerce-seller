@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.ecommerceseller.R;
@@ -22,6 +23,8 @@ public class AddProductFrag extends Fragment {
 
     Button uploadProduct;
     TextInputLayout nameIL,priceIL, stockIL,descIL;
+    ProgressBar uploadPB;
+    AddProductViewModel addProductViewModel;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,8 +35,9 @@ public class AddProductFrag extends Fragment {
         priceIL =v.findViewById(R.id.productPrice_IL);
         stockIL =v.findViewById(R.id.productStock_IL);
         descIL =v.findViewById(R.id.productDesc_IL);
+        uploadPB =v.findViewById(R.id.uploadProduct_PB);
 
-        final AddProductViewModel addProductViewModel= ViewModelProviders.of(this).get(AddProductViewModel.class);
+        addProductViewModel= ViewModelProviders.of(this).get(AddProductViewModel.class);
         uploadProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +57,8 @@ public class AddProductFrag extends Fragment {
                                     }
                                 }
                             });
+                    observeLoading();
+                    clearFields();
                 }
 
 
@@ -96,5 +102,29 @@ public class AddProductFrag extends Fragment {
         }
 
         return pass;
+    }
+
+    private void clearFields(){
+        nameIL.getEditText().setText("");
+        priceIL.getEditText().setText("");
+        stockIL.getEditText().setText("");
+        descIL.getEditText().setText("");
+        descIL.clearFocus();
+        stockIL.clearFocus();
+        descIL.clearFocus();
+        nameIL.clearFocus();
+    }
+
+    private void observeLoading(){
+        addProductViewModel.getIsLoading()
+                .observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(@Nullable Boolean aBoolean) {
+                        if (aBoolean!=null&&aBoolean)
+                            uploadPB.setVisibility(View.VISIBLE);
+                        else
+                            uploadPB.setVisibility(View.GONE);
+                    }
+                });
     }
 }

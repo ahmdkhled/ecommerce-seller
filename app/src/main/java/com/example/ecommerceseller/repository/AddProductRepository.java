@@ -14,6 +14,9 @@ public class AddProductRepository {
 
     private static AddProductRepository addProductRepository;
     private MutableLiveData<ProductResponse> productResponse=new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLoading=new MutableLiveData<>();
+    private MutableLiveData<String> error=new MutableLiveData<>();
+
 
     public static AddProductRepository getInstance(){
         if (addProductRepository==null)
@@ -24,6 +27,7 @@ public class AddProductRepository {
     public MutableLiveData<ProductResponse> uploadProduct(String name, float price, int quantity
                                         , String desc, int categoryId, int marketId ){
 
+        isLoading.setValue(true);
         RetrofitClient.getApiService().
                 UplaodProduct(name,desc,quantity,price,categoryId,marketId)
                 .enqueue(new Callback<ProductResponse>() {
@@ -33,15 +37,26 @@ public class AddProductRepository {
                             ProductResponse r=response.body();
                             productResponse.setValue(r);
                         }
+                        isLoading.setValue(false);
 
                     }
 
                     @Override
                     public void onFailure(Call<ProductResponse> call, Throwable t) {
+                        isLoading.setValue(false);
+                        error.setValue(t.getMessage());
                         Log.d("ADDDDPRODUCTT",t.getMessage());
                     }
                 });
 
         return productResponse;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
+    public MutableLiveData<String> getError() {
+        return error;
     }
 }
