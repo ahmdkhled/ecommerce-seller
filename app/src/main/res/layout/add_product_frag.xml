@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         >
 
         <TextView
@@ -19,6 +17,8 @@
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:text="name"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/productName_IL"
@@ -149,8 +149,8 @@
             android:text="image"
             android:id="@+id/product_imageLabel"
             android:textSize="20sp"
-            app:layout_constraintTop_toTopOf="@id/upload"
-            app:layout_constraintBottom_toBottomOf="@id/upload"
+            app:layout_constraintTop_toTopOf="@id/uploadMedia"
+            app:layout_constraintBottom_toBottomOf="@id/uploadMedia"
             app:layout_constraintStart_toStartOf="@id/product_nameLabel"
             app:layout_constraintTop_toBottomOf="@id/product_category"
             />
@@ -158,7 +158,7 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:background="#D31F1F"
-           android:id="@+id/upload"
+           android:id="@+id/uploadMedia"
            android:textColor="#fff"
            android:text="upload"
            app:layout_constraintStart_toStartOf="@id/product_categorySpinner"
@@ -167,12 +167,24 @@
         <Button
             android:layout_width="match_parent"
             android:background="@color/colorPrimary"
+            android:id="@+id/uploadProduct"
             android:textColor="#fff"
             android:layout_height="wrap_content"
             android:text="Add Product"
-            app:layout_constraintTop_toBottomOf="@id/upload"
+            app:layout_constraintTop_toBottomOf="@id/uploadMedia"
             android:layout_marginTop="20dp"
             />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/uploadProduct_PB"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>
