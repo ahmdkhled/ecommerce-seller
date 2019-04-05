@@ -1,5 +1,6 @@
 package com.example.ecommerceseller.network;
 
+import com.example.ecommerceseller.model.Category;
 import com.example.ecommerceseller.model.Order;
 import com.example.ecommerceseller.model.ProductResponse;
 
@@ -16,6 +17,9 @@ public interface ApiService {
 
     @GET("orders.php")
     Call<ArrayList<Order>> getOrders(@Query("marketId")String marketId);
+
+    @GET("categories.php")
+    Call<ArrayList<Category>> getCategories();
 
     @FormUrlEncoded
     @POST("products.php")

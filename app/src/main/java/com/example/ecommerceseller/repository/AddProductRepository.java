@@ -3,8 +3,11 @@ package com.example.ecommerceseller.repository;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
+import com.example.ecommerceseller.model.Category;
 import com.example.ecommerceseller.model.ProductResponse;
 import com.example.ecommerceseller.network.RetrofitClient;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,8 +17,11 @@ public class AddProductRepository {
 
     private static AddProductRepository addProductRepository;
     private MutableLiveData<ProductResponse> productResponse=new MutableLiveData<>();
-    private MutableLiveData<Boolean> isLoading=new MutableLiveData<>();
-    private MutableLiveData<String> error=new MutableLiveData<>();
+    private MutableLiveData<ArrayList<Category>> categoriesList=new MutableLiveData<>();
+    private MutableLiveData<Boolean> isUploading =new MutableLiveData<>();
+    private MutableLiveData<Boolean> isCategoriesLoading =new MutableLiveData<>();
+    private MutableLiveData<String> UploadError =new MutableLiveData<>();
+    private MutableLiveData<String> LoadingError =new MutableLiveData<>();
 
 
     public static AddProductRepository getInstance(){
@@ -28,7 +34,7 @@ public class AddProductRepository {
                                         , String desc, int categoryId, int marketId ){
         Log.d("ADDDDPRODUCTT","request");
 
-        isLoading.setValue(true);
+        isUploading.setValue(true);
         RetrofitClient.getApiService().
                 UplaodProduct(name,desc,quantity,price,categoryId,marketId)
                 .enqueue(new Callback<ProductResponse>() {
@@ -38,14 +44,14 @@ public class AddProductRepository {
                             ProductResponse r=response.body();
                             productResponse.setValue(r);
                         }
-                        isLoading.setValue(false);
+                        isUploading.setValue(false);
 
                     }
 
                     @Override
                     public void onFailure(Call<ProductResponse> call, Throwable t) {
-                        isLoading.setValue(false);
-                        error.setValue(t.getMessage());
+                        isUploading.setValue(false);
+                        UploadError.setValue(t.getMessage());
                         Log.d("ADDDDPRODUCTT",t.getMessage());
                     }
                 });
@@ -53,11 +59,40 @@ public class AddProductRepository {
         return productResponse;
     }
 
-    public MutableLiveData<Boolean> getIsLoading() {
-        return isLoading;
+
+    public MutableLiveData<ArrayList<Category>> getCategories(){
+        RetrofitClient.getApiService()
+                .getCategories()
+                .enqueue(new Callback<ArrayList<Category>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Category>> call, Response<ArrayList<Category>> response) {
+                        if (response.isSuccessful()){
+                            ArrayList<Category> list=response.body();
+                            categoriesList.setValue(list);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Category>> call, Throwable t) {
+
+                    }
+                });
+        return categoriesList;
     }
 
-    public MutableLiveData<String> getError() {
-        return error;
+    public MutableLiveData<Boolean> getIsUploading() {
+        return isUploading;
+    }
+
+    public MutableLiveData<String> getUploadError() {
+        return UploadError;
+    }
+
+    public MutableLiveData<Boolean> getIsCategoriesLoading() {
+        return isCategoriesLoading;
+    }
+
+    public MutableLiveData<String> getLoadingError() {
+        return LoadingError;
     }
 }

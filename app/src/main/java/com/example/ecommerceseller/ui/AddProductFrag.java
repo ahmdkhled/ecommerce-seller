@@ -8,23 +8,32 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.ecommerceseller.R;
+import com.example.ecommerceseller.model.Category;
 import com.example.ecommerceseller.model.ProductResponse;
 import com.example.ecommerceseller.viewmodel.AddProductViewModel;
+
+import java.util.ArrayList;
 
 public class AddProductFrag extends Fragment {
 
     Button uploadProduct;
     TextInputLayout nameIL,priceIL, stockIL,descIL;
     ProgressBar uploadPB;
+    Spinner categoriesSpinner;
     AddProductViewModel addProductViewModel;
+    int categoryId=-1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,11 +45,48 @@ public class AddProductFrag extends Fragment {
         stockIL =v.findViewById(R.id.productStock_IL);
         descIL =v.findViewById(R.id.productDesc_IL);
         uploadPB =v.findViewById(R.id.uploadProduct_PB);
+        categoriesSpinner =v.findViewById(R.id.product_categorySpinner);
 
         addProductViewModel= ViewModelProviders.of(this).get(AddProductViewModel.class);
+
+        addProductViewModel.getCategories()
+                .observe(this, new Observer<ArrayList<Category>>() {
+                    @Override
+                    public void onChanged(@Nullable final ArrayList<Category> categories) {
+                        if (categories!=null){
+                            ArrayList<String> c=new ArrayList<>();
+                            for (int i = 0; i < categories.size(); i++) {
+                                c.add(categories.get(i).getName());
+                            }
+                            ArrayAdapter<String> arrayAdapter=new ArrayAdapter<>(getContext(),
+                                    android.R.layout.simple_spinner_item,c
+                                    );
+                            categoriesSpinner.setAdapter(arrayAdapter);
+                            categoriesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    categoryId=categories.get(position).getId();
+                                    Log.d("SPINNERRR","position "+position+" id "+id);
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+                                    Log.d("SPINNERRR","nothing ");
+
+                                }
+                            });
+                        }
+
+                    }
+                });
+
         uploadProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (categoryId==-1){
+                    return;
+                }
+
                 if (validateInput()){
                     uploadProduct.setEnabled(false);
                     String name=nameIL.getEditText().getText().toString();
@@ -49,7 +95,7 @@ public class AddProductFrag extends Fragment {
                     String desc=descIL.getEditText().getText().toString();
 
                     addProductViewModel.uploadProduct(name,Float.valueOf(price),
-                            Integer.valueOf(stock),desc,2,1)
+                            Integer.valueOf(stock),desc,categoryId,1)
                             .observe(getActivity(), new Observer<ProductResponse>() {
                                 @Override
                                 public void onChanged(@Nullable ProductResponse productResponse) {
@@ -119,7 +165,7 @@ public class AddProductFrag extends Fragment {
     }
 
     private void observeLoading(){
-        addProductViewModel.getIsLoading()
+        addProductViewModel.getIsUploading()
                 .observe(this, new Observer<Boolean>() {
                     @Override
                     public void onChanged(@Nullable Boolean aBoolean) {
@@ -132,7 +178,7 @@ public class AddProductFrag extends Fragment {
     }
 
     private void observeError(){
-        addProductViewModel.getError().observe(this, new Observer<String>() {
+        addProductViewModel.getUploadError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 uploadProduct.setEnabled(true);
