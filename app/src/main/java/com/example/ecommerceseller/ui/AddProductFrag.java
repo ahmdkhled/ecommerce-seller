@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.ecommerceseller.R;
 import com.example.ecommerceseller.model.Category;
 import com.example.ecommerceseller.model.ProductResponse;
+import com.example.ecommerceseller.utils.SessionManager;
 import com.example.ecommerceseller.viewmodel.AddProductViewModel;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class AddProductFrag extends Fragment {
     Spinner categoriesSpinner;
     AddProductViewModel addProductViewModel;
     int categoryId=-1;
+    int marketId=-1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class AddProductFrag extends Fragment {
         categoriesSpinner =v.findViewById(R.id.product_categorySpinner);
 
         addProductViewModel= ViewModelProviders.of(this).get(AddProductViewModel.class);
-
+        marketId= SessionManager.getInstance(getContext()).getMarketId();
         addProductViewModel.getCategories()
                 .observe(this, new Observer<ArrayList<Category>>() {
                     @Override
@@ -86,7 +88,11 @@ public class AddProductFrag extends Fragment {
                 if (categoryId==-1){
                     return;
                 }
-
+                if (marketId==-1){
+                    Toast.makeText(getContext(), "register a market first before uploading products !",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if (validateInput()){
                     uploadProduct.setEnabled(false);
                     String name=nameIL.getEditText().getText().toString();
@@ -95,7 +101,7 @@ public class AddProductFrag extends Fragment {
                     String desc=descIL.getEditText().getText().toString();
 
                     addProductViewModel.uploadProduct(name,Float.valueOf(price),
-                            Integer.valueOf(stock),desc,categoryId,1)
+                            Integer.valueOf(stock),desc,categoryId,marketId)
                             .observe(getActivity(), new Observer<ProductResponse>() {
                                 @Override
                                 public void onChanged(@Nullable ProductResponse productResponse) {
