@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.LoginActivity">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_PB"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:elevation="7dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintVertical_bias=".2"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <TextView
         android:id="@+id/loginEmail_label"
         android:layout_width="wrap_content"
@@ -14,10 +27,14 @@
         android:text="Email"
         android:textSize="17sp"
         android:textStyle="bold"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintTop_toTopOf="@id/loginEMail_IL"
         app:layout_constraintBottom_toBottomOf="@id/loginEMail_IL"
         app:layout_constraintVertical_bias=".75"
-         />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="0dp"
@@ -71,12 +88,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Login"
+        android:id="@+id/login"
         app:layout_constraintTop_toBottomOf="@id/loginPass_IL"
         android:layout_marginTop="20dp"
         android:text="Login"
         android:textAllCaps="false"
         android:background="@color/colorPrimary"
         android:textColor="#fff"/>
+
+
 
 </android.support.constraint.ConstraintLayout>
