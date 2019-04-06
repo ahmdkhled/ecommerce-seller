@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.LoginActivity">
+
+    <TextView
+        android:id="@+id/loginEmail_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/loginEMail_IL"
+        app:layout_constraintBottom_toBottomOf="@id/loginEMail_IL"
+        app:layout_constraintVertical_bias=".75"
+         />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginEMail_IL"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/loginPass_IL"
+        app:layout_constraintEnd_toEndOf="@id/loginPass_IL"
+        app:layout_constraintVertical_bias=".3"
+        >
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textEmailAddress"
+            android:hint="enter your email"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginPass_label"
+        android:text="Password"
+        app:layout_constraintTop_toTopOf="@id/loginPass_IL"
+        app:layout_constraintBottom_toBottomOf="@id/loginPass_IL"
+        app:layout_constraintTop_toBottomOf="@id/loginEMail_IL"
+        app:layout_constraintVertical_bias=".75"
+        app:layout_constraintStart_toStartOf="@id/loginEmail_label"
+        android:textStyle="bold"
+        android:textSize="17sp"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginPass_IL"
+        app:layout_constraintTop_toBottomOf="@id/loginEMail_IL"
+        app:layout_constraintStart_toEndOf="@id/loginPass_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textPassword"
+            android:hint="enter password" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Login"
+        app:layout_constraintTop_toBottomOf="@id/loginPass_IL"
+        android:layout_marginTop="20dp"
+        android:text="Login"
+        android:textAllCaps="false"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"/>
+
+</android.support.constraint.ConstraintLayout>
