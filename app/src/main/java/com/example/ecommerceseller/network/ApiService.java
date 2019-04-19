@@ -1,6 +1,7 @@
 package com.example.ecommerceseller.network;
 
 import com.example.ecommerceseller.model.Category;
+import com.example.ecommerceseller.model.Dashboard;
 import com.example.ecommerceseller.model.LoginResponse;
 import com.example.ecommerceseller.model.Order;
 import com.example.ecommerceseller.model.ProductResponse;
@@ -26,6 +27,10 @@ public interface ApiService {
 
     @GET("categories.php")
     Call<ArrayList<Category>> getCategories();
+
+    @GET("sellerDashboard.php")
+    Call<Dashboard> getDashboardData(@Query("sellerId") int sellerId);
+
 
     @FormUrlEncoded
     @POST("products.php")
