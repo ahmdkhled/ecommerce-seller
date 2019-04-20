@@ -2,10 +2,13 @@ package com.example.ecommerceseller.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +19,7 @@ import android.view.MenuItem;
 import com.example.ecommerceseller.R;
 import com.example.ecommerceseller.adapter.OrdersAdapter;
 import com.example.ecommerceseller.model.Order;
+import com.example.ecommerceseller.viewmodel.MainActivityVM;
 import com.example.ecommerceseller.viewmodel.OrdersViewModel;
 
 import java.util.ArrayList;
@@ -24,34 +28,40 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     Toolbar toolbar;
-    OrdersFrag ordersFrag;
-    AddProductFrag addProductFrag;
-    DashboardFrag dashboardFrag;
-    Fragment current;
+    OrdersFrag ordersFrag = new OrdersFrag();
+    AddProductFrag addProductFrag =new AddProductFrag();
+    DashboardFrag dashboardFrag = new DashboardFrag();
+    MainActivityVM vm;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fragmentManager = getSupportFragmentManager();
+
+        if(savedInstanceState == null) {
+            fragmentManager.beginTransaction().add(R.id.container, dashboardFrag).hide(dashboardFrag).commit();
+            fragmentManager.beginTransaction().add(R.id.container, addProductFrag).hide(addProductFrag).commit();
+            fragmentManager.beginTransaction().add(R.id.container, ordersFrag).commit();
+        }
+
         bottomNavigationView=findViewById(R.id.mainBottomNavigation);
         toolbar=findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
-
-        createFragments();
-
+        vm=ViewModelProviders.of(this).get(MainActivityVM.class);
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId()==R.id.ordersTab){
-                    showFragment(ordersFrag);
-                }else if (item.getItemId()==R.id.addProductTab){
-                    showFragment(addProductFrag);
+                    showFragmenr(ordersFrag);
+                }else if (item.getItemId  ()==R.id.addProductTab){
+                    showFragmenr(addProductFrag);
                 }else if (item.getItemId()==R.id.dashboardTab){
-                    showFragment(dashboardFrag);
-
+                    showFragmenr(dashboardFrag);
                 }
                 return true;
             }
@@ -59,53 +69,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void showFragment(Fragment fragment){
-        Log.d("BOTTOMVIEWW","current ");
-
-        if (fragment==current){
-            Log.d("BOTTOMVIEWW","null");
-            return;
+    public void showFragmenr(Fragment fragment){
+        if(fragment.isAdded()){
+            fragmentManager.beginTransaction().show(fragment).commit();
+        }else{
+            fragmentManager.beginTransaction().add(R.id.container,fragment).commit();
         }
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .show(fragment)
-                .hide(current)
-                .addToBackStack(null)
-                .commit();
-        current=fragment;
+        for(Fragment frag : fragmentManager.getFragments()){
+            if(frag != fragment && frag.isAdded()){
+                fragmentManager.beginTransaction().hide(frag).commit();
+            }
+        }
     }
 
-    void createFragments(){
-        OrdersFrag ordersFragment = (OrdersFrag) getSupportFragmentManager().findFragmentByTag("orders_frag");
-        AddProductFrag addProductFragment = (AddProductFrag) getSupportFragmentManager().findFragmentByTag("addProduct_frag");
-        DashboardFrag dashboardFragment = (DashboardFrag) getSupportFragmentManager().findFragmentByTag("dashboard_frag");
-        if (ordersFragment==null){
-            ordersFrag=new OrdersFrag();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.container,ordersFrag,"orders_frag")
-                    .commit();
-        }
 
-        if (addProductFragment==null){
-            addProductFrag=new AddProductFrag();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.container,addProductFrag,"addProduct_frag")
-                    .hide(addProductFrag)
-                    .commit();
-        }
-
-        if (dashboardFragment==null){
-            dashboardFrag=new DashboardFrag();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.container,dashboardFrag,"dashboard_frag")
-                    .hide(dashboardFrag)
-                    .commit();
-        }
-
-        current=ordersFrag;
-    }
 }
